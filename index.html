@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sievert’s Surface</title>
+    <title>PA3</title>
     <style>
         body {
             background-color: #f4f4f9;
@@ -99,15 +99,15 @@
     <div class="inputWrapper">
         <div class="inputContainer">
             <p>A:</p>
-            <input type="number" name="A" id="A" min="-10.0" max="10" step="0.1" value="2">
+            <input type="number" name="A" id="A" min="-10.0" max="10" step="0.1" value="0">
         </div>
         <div class="inputContainer">
             <p>B:</p>
-            <input type="number" name="B" id="B" min="-10.0" max="10" step="0.1" value="1.5">
+            <input type="number" name="B" id="B" min="-10.0" max="10" step="0.1" value="1">
         </div>
         <div class="inputContainer">
             <p>N:</p>
-            <input type="number" name="N" id="N" min="-10.0" max="10" step="0.1" value="5">
+            <input type="number" name="N" id="N" min="-10.0" max="10" step="0.1" value="1">
         </div>
         <div class="inputContainer">
             <p>U Segments:</p>
@@ -126,7 +126,7 @@
             <input type="number" name="VMax" id="VMax" min="-10.0" max="10" step="0.1" value="1">
         </div>
     </div>
-
+    
     <div id="canvas-holder" style="position: relative, overflow: scroll">
         <canvas width="700" height="700" id="webglcanvas"></canvas>
     </div>
@@ -134,6 +134,7 @@
     <script defer type="module" src="./main.mjs"></script>
     <script src="./shader.gpu"></script>
     <script src="./Utils/m4.js"></script>
+    <script src="./TextureHandler.mjs"></script>
 </body>
 
 </html>
