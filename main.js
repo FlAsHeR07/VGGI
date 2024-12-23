@@ -120,3 +120,4 @@ function init() {
     spaceball = new TrackballRotator(canvas, draw, 0);
     draw();
 }
+
