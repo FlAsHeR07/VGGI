@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ruled Rotor Cylindroid</title>
+    <style>
+        body {
+            background: radial-gradient(circle, #000000, #16041f);;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Горизонтальное выравнивание */
+            align-items: center;
+        }
+        h2, p {
+            margin-top: 30px;
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        #canvas-holder {
+            flex: 1; 
+            width: 100%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #webglcanvas {
+            width: 80%; 
+            height: 80%; 
+        }
+
+    </style>
+    <script src="./Utils/trackball-rotator.js"></script>
+    <script src="./Utils/m4.js"></script>
+    <script src="./shader.gpu"></script>
+    <script src="./model.js"></script>
+    <script src="./main.js"></script>
+</head>
+<body onload="init()">
+    <h2>Ruled Rotor Cylindroid</h2>
+    <p id="message">Середа Владислав ТР 43-МП</p>
+    <div id="canvas-holder" >
+        <canvas id="webglcanvas" class="model"></canvas>
+    </div>
+</body>
+</html>
