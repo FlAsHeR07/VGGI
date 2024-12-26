@@ -17,16 +17,23 @@ uniform sampler2D diffuseTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D specularTexture;
 
+uniform vec2 point;
+uniform vec2 scale;
+
 varying vec3 fragColor;
 
-vec3 getNormal() {
+vec2 getUV() {
+    return ((inUV - point) * scale) + point;
+}
+
+vec3 getNormal(vec2 uv) {
     vec3 normal = normalize(mat3(normalMatrix) * inNormal);
     vec3 tangent = normalize(mat3(normalMatrix) * inTangent);
 
     tangent = normalize(tangent - dot(tangent, normal) * normal);
 
     vec3 bitangent = cross(tangent, normal);
-    vec3 normalMap = texture2D(normalTexture, inUV).rgb;
+    vec3 normalMap = texture2D(normalTexture, uv).rgb;
     normalMap = 2.0 * normalMap - vec3(1.0, 1.0, 1.0);
 
     mat3 TBN = mat3(tangent, bitangent, normal);
@@ -35,13 +42,14 @@ vec3 getNormal() {
 
 void main() {
     const float ambientFactor = 0.2;
-    vec3 color = texture2D(diffuseTexture, inUV).rgb;
-    float specularFactor = pow(texture2D(specularTexture, inUV).r, 2.0);
+    vec2 uv = getUV();
+    vec3 color = texture2D(diffuseTexture, uv).rgb;
+    float specularFactor = pow(texture2D(specularTexture, uv).r, 2.0);
 
     vec4 vertex = modelMatrix * vec4(inVertex, 1.0);
     vertex /= vertex.w;
 
-    vec3 N = getNormal();
+    vec3 N = getNormal(uv);
     vec3 L = normalize(vertex.xyz - lightLocation);
     vec3 V = normalize(-vertex.xyz);
 

@@ -77,19 +77,31 @@
 
         #canvas-holder {
             margin-top: 20px;
-            width: 700px;
-            height: 700px;
             background-color: #ecf0f1;
             border: 2px solid #bdc3c7;
             border-radius: 10px;
+            padding: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
+        }
+
+        #canvas-container {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
             justify-content: center;
+            align-items: center;
         }
 
         canvas {
-            width: 100%;
-            height: 100%;
+            border: 1px solid #bdc3c7;
+        }
+
+        #coordinates {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #34495e;
         }
     </style>
 </head>
@@ -99,7 +111,7 @@
     <div class="inputWrapper">
         <div class="inputContainer">
             <p>A:</p>
-            <input type="number" name="A" id="A" min="-10.0" max="10" step="0.1" value="0">
+            <input type="number" name="A" id="A" min="-10.0" max="10" step="0.1" value="1">
         </div>
         <div class="inputContainer">
             <p>B:</p>
@@ -119,16 +131,26 @@
         </div>
         <div class="inputContainer">
             <p>V Min:</p>
-            <input type="number" name="VMin" id="VMin" min="-10.0" max="10" step="0.1" value="-1">
+            <input type="number" name="VMin" id="VMin" min="-10.0" max="10" step="0.1" value="0">
         </div>
         <div class="inputContainer">
             <p>V Max:</p>
-            <input type="number" name="VMax" id="VMax" min="-10.0" max="10" step="0.1" value="1">
+            <input type="number" name="VMax" id="VMax" min="-10.0" max="10" step="0.1" value="5">
+        </div>
+        <div class="inputContainer">
+            <p>Scale U:</p>
+            <input type="number" name="SU" id="SU" min="0.1" max="10" step="0.1" value="1">
+            <p>Scale V:</p>
+            <input type="number" name="SV" id="SV" min="0.1" max="10" step="0.1" value="1">
         </div>
     </div>
-    
-    <div id="canvas-holder" style="position: relative, overflow: scroll">
-        <canvas width="700" height="700" id="webglcanvas"></canvas>
+
+    <div id="canvas-holder">
+        <p id="coordinates">Coordinates: (0, 0)</p>
+        <div id="canvas-container">
+            <canvas width="700" height="700" id="uvcanvas"></canvas>
+            <canvas width="700" height="700" id="webglcanvas"></canvas>
+        </div>
     </div>
 
     <script defer type="module" src="./main.mjs"></script>

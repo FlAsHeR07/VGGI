@@ -2,6 +2,10 @@ function normalizeUV(value, min, max) {
     return (value - min) / (max - min);
 }
 
+function get(name) {
+    return parseFloat(document.getElementById(name).value);
+}
+
 function calculateNormalsAndTangents(vertices, indices, uvs) {
     const normals = new Float32Array(vertices.length).fill(0);
     const tangents = new Float32Array(vertices.length).fill(0);
@@ -112,24 +116,13 @@ function generateSurface(a, b, n, uSteps, vSteps, vMin, vMax) {
     for (let i = 0; i <= uSteps; i++) {
         const u = uMin + i * du;
 
-        {
-            const current = createPoint(a, b, n, u, vMin);
-            const prev = createPoint(a, b, n, u - du, 0);
-            
-            accomulatedU += m4.length(m4.subtractVectors(current, prev)) * 0.025;
-        }
-        
-        let accomulatedV = 0.0;
-
         for (let j = 0; j <= vSteps; j++) {
             const v = vMin + j * dv;
 
             const current = createPoint(a, b, n, u, v);
             vertices.push(...current);
 
-            const prev = createPoint(a, b, n, u, v - dv);
-            accomulatedV += m4.length(m4.subtractVectors(current, prev)) * 0.25;
-            uvs.push(accomulatedU, accomulatedV);
+            uvs.push(normalizeUV(u, uMin, uMax), normalizeUV(v, vMin, vMax));
         }
     }
 
@@ -159,6 +152,10 @@ export default function Model(gl, shProgram) {
     this.idTextureNormal = LoadTexture(gl, "./textures/normal.jpg");
     this.idTextureSpecular = LoadTexture(gl, "./textures/specular.jpg");
 
+    this.point = [0.5, 0.5];
+    this.uvBuffer = [];
+    this.indexBuffer = [];
+
     this.count = 0;
 
     this.BufferData = function(vertices, normals, tangents, uvs, indices) {
@@ -176,6 +173,9 @@ export default function Model(gl, shProgram) {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.iIndexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+        this.uvBuffer = uvs;
+        this.indexBuffer = indices;
 
         this.count = indices.length;
     };
@@ -208,14 +208,13 @@ export default function Model(gl, shProgram) {
         gl.activeTexture(gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, this.idTextureSpecular);
 
+        gl.uniform2fv(shProgram.iPoint, this.point);
+        gl.uniform2fv(shProgram.iScale, [get('SU'), get('SV')]);
+
         gl.drawElements(gl.TRIANGLES, this.count, gl.UNSIGNED_SHORT, 0);
     }
 
     this.CreateSurfaceData = function() {
-        function get(name) {
-            return parseFloat(document.getElementById(name).value);
-        }
-
         const { vertices, uvs, indices } = generateSurface(get('A'), get('B'), get('N'), get('USeg'), get('VSeg'), get('VMin'), get('VMax'));
         const {normals, tangents} = calculateNormalsAndTangents(vertices, indices, uvs);
         this.BufferData(vertices, normals, tangents, uvs, indices);
